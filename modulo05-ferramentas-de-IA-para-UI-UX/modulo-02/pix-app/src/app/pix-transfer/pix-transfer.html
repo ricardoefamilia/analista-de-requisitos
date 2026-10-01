@@ -1,31 +1,75 @@
-@if (transferReceiptData(); as receipt) {
-<app-pix-receipt [nome]="receipt.nome" [valor]="receipt.valor"></app-pix-receipt>
+@if (comprovante(); as recibo) {
+  <app-pix-receipt
+    [nome]="recibo.nomeContato"
+    [valor]="recibo.valor"
+    [dataAgendamento]="recibo.data"
+    [chave]="recibo.chave"
+    (cancelar)="cancelarComprovante()"
+    (novoAgendamento)="novoAgendamento()"
+  ></app-pix-receipt>
 } @else {
-<section>
-    <h2>Transferência Pix</h2>
+  <section>
+    <h2>Agendar Pix</h2>
     <form (ngSubmit)="onSubmit()">
-        <div>
-            <label for="pixKey">Chave Pix</label>
-            <input type="text" id="pixKey" name="pixKey" [(ngModel)]="pixKey" required>
-        </div>
+      <div>
+        <label for="contato">Contato</label>
+        <select id="contato" name="contato" [ngModel]="contatoId()" (ngModelChange)="contatoId.set($event)" required>
+          <option value="">Selecione um contato</option>
+          @for (contato of contatos(); track contato.id) {
+            <option [value]="contato.id">{{ contato.nome }} · {{ contato.chave }}</option>
+          }
+        </select>
+      </div>
 
-        <div>
-            <label for="transferAmount">Valor da Transferência</label>
-            <input type="number" id="transferAmount" name="transferAmount" [(ngModel)]="transferAmount" required>
-        </div>
+      <div>
+        <label for="transferAmount">Valor</label>
+        <input
+          type="number"
+          id="transferAmount"
+          name="transferAmount"
+          min="0.01"
+          step="0.01"
+          [ngModel]="transferAmount()"
+          (ngModelChange)="definirValor($event)"
+          required
+        />
+      </div>
 
-        <div>
-            <label for="schedulingDate">Data de Agendamento</label>
-            <input type="date" id="schedulingDate" name="schedulingDate" [(ngModel)]="schedulingDate" required>
-        </div>
+      <div>
+        <label for="schedulingDate">Data</label>
+        <input
+          type="date"
+          id="schedulingDate"
+          name="schedulingDate"
+          [ngModel]="schedulingDate()"
+          (ngModelChange)="schedulingDate.set($event)"
+          required
+        />
+      </div>
 
-        <button type="submit">Confirmar</button>
+      <button type="submit">Confirmar</button>
     </form>
-</section>
+  </section>
 }
 
-@if (showErrorModal()) {
-<app-error-modal title="Limite Excedido"
-    message="Para sua segurança, transferências Pix acima de R$ 5.000,00 precisam ser aprovadas pelo seu gerente."
-    (close)="showErrorModal.set(false)"></app-error-modal>
+@if (ativos().length) {
+  <section class="lista-agendamentos">
+    <h2>Agendamentos</h2>
+    <ul>
+      @for (item of ativos(); track item.id) {
+        <li>
+          <div>
+            <strong>{{ item.nomeContato }}</strong>
+            <span>{{ item.valor | currency: 'BRL' : 'symbol' : '1.2-2' }}</span>
+            <span>{{ item.data | date: 'dd/MM/yyyy' : 'UTC' }}</span>
+          </div>
+          <button type="button" (click)="cancelarAgendamento(item.id)">Cancelar agendamento</button>
+        </li>
+      }
+    </ul>
+  </section>
+}
+
+@if (showErrorModal() && erroAtual(); as erro) {
+  <app-error-modal [title]="erro.titulo" [message]="erro.mensagem" (close)="fecharErro()"></app-error-modal>
 }

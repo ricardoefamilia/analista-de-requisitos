@@ -19,7 +19,7 @@ aside nav ul {
 }
 
 aside nav ul li a {
-    color: var(--color-text);
+    color: #f8f9fa;
     text-decoration: none;
     font-family: var(--font-heading);
     font-weight: bold;

@@ -5,7 +5,7 @@
       <div class="success-icon">
         <span class="material-symbols-outlined check-icon">check_circle</span>
       </div>
-      <h1 class="receipt-title">Transferência Realizada</h1>
+      <h1 class="receipt-title">Agendamento confirmado</h1>
       <p class="receipt-amount">{{ valor() | currency:'BRL':'symbol':'1.2-2' }}</p>
       <div class="divider"></div>
 
@@ -16,19 +16,12 @@
           <span class="detail-value highlight">{{ nome() }}</span>
         </div>
         <div class="detail-row">
-          <span class="detail-label">Data e Hora</span>
-          <div class="detail-time">
-            <span class="detail-value block">24 de Maio, 2024</span>
-            <span class="detail-subvalue">14:30:45</span>
-          </div>
+          <span class="detail-label">Chave Pix</span>
+          <span class="detail-value block">{{ chave() }}</span>
         </div>
         <div class="detail-row">
-          <span class="detail-label">Instituição</span>
-          <span class="detail-value block">Banco Neon</span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">ID da Transação</span>
-          <span class="detail-value mono">PIX9823749823BCN9283</span>
+          <span class="detail-label">Data do agendamento</span>
+          <span class="detail-value block">{{ formatarData(dataAgendamento()) }}</span>
         </div>
       </div>
     </div>
@@ -51,12 +44,11 @@
 
     <!-- Main Footer Button -->
     <div class="footer-actions">
-      <button class="primary-btn">
-        <span class="material-symbols-outlined">home</span>
-        Voltar ao Início
+      <button type="button" class="primary-btn" (click)="novoAgendamento.emit()">
+        Fazer novo agendamento
       </button>
-      <button class="secondary-btn">
-        Fazer nova transferência
+      <button type="button" class="secondary-btn" (click)="cancelar.emit()">
+        Cancelar agendamento
       </button>
     </div>
   </div>

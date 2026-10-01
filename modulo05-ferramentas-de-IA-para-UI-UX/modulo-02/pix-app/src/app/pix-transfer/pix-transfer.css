@@ -32,7 +32,8 @@ label {
     font-weight: bold;
 }
 
-input {
+input,
+select {
     font-family: var(--font-body);
     padding: var(--spacing-medium);
     border-style: solid;
@@ -62,4 +63,26 @@ button {
 button:hover {
     background-color: var(--color-primary);
     color: var(--color-action);
+}
+
+.lista-agendamentos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-medium);
+}
+
+.lista-agendamentos li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-medium);
+}
+
+.lista-agendamentos li div {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-small);
 }
